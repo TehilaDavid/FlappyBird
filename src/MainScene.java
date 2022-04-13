@@ -9,13 +9,28 @@ public class MainScene extends JPanel {
     private Bird bird;
     private LinkedList<Obstacle> obstacles;
     private ImageIcon background;
+    private int passedCounter;
+    private JLabel score; // ניקוד
+    private int playerRecord;
+    private EndGameWindow endGameWindow;
 
 
     public MainScene(int x, int y, int width, int height) {
         this.setBounds(x, y, width, height);
         this.bird = new Bird(Color.YELLOW);
+        this.playerRecord = 0;
+        this.passedCounter = 0;
+        this.score = new JLabel();
+        this.score.setBounds((Window.MAIN_SCENE_WIDTH/2)-15,5, 50,60);
+        Font scoreFont = new Font("Ariel", Font.BOLD, 50);
+        this.score.setFont(scoreFont);
+        this.score.setText(""+this.passedCounter);
+        this.add(this.score);
         this.mainGameLoop();
         this.obstacles = new LinkedList<>();
+        this.endGameWindow = new EndGameWindow();
+
+
     }
 
     protected void paintComponent(Graphics g) {
@@ -34,49 +49,27 @@ public class MainScene extends JPanel {
     }
 
     private void mainGameLoop() {
-
+        System.out.println("loop");
         new Thread(() -> {
             this.setFocusable(true);
             this.requestFocus();
 
             while (true) {
-                this.obstacles.add(new Obstacle());
-                if (this.obstacles.getFirst().end()) {
-                    this.obstacles.removeFirst();
-                }
-                repaint();
-
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        new Thread(() -> {
-            this.setFocusable(true);
-            this.requestFocus();
-
-            while (true) {
-                try {
-                    for (Obstacle obstacle : this.obstacles) {
-                        obstacle.moveLeft();
+                if (this.bird.isAlive()) {
+                    this.obstacles.add(new Obstacle());
+                    if (this.obstacles.getFirst().end()) {
+                        this.obstacles.removeFirst();
                     }
-                } catch (ConcurrentModificationException e) {
-                    e.printStackTrace();
-                }
+                    repaint();
 
-                repaint();
-
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    try {
+                        Thread.sleep(4000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();
-
 
         new Thread(() -> {
             this.setFocusable(true);
@@ -86,14 +79,35 @@ public class MainScene extends JPanel {
 
             while (true) {
                 this.bird.moveDown();
-
                 if (!this.obstacles.isEmpty()) {
-                    if (this.bird.getLowerBird() > Window.WINDOW_HEIGHT || this.bird.getUpperBird() < Window.Y_MAIN_SCENE ||
+                    if (this.obstacles.getFirst().isPassedBird()) {
+                        this.passedCounter++;
+                        this.score.setText("" + this.passedCounter);
+                    }
+                    if (this.bird.getLowerBird() > (Window.MAIN_SCENE_HEIGHT - Obstacle.GROUND_HEIGHT) || this.bird.getUpperBird() < Window.Y_MAIN_SCENE ||
                             this.bird.checkCollision(this.obstacles.getFirst())) {
                         this.bird.kill();
+                        this.score.setText("Game Over");
+                        if (this.playerRecord < this.passedCounter){
+                            this.playerRecord = this.passedCounter;
+                        }
+                        this.endGameWindow.setEndGamePanel(this.passedCounter, this.playerRecord);
+                        this.add(this.endGameWindow);
+                        this.endGameWindow.getRestart().addActionListener((event) -> {
+                            restart();
+                        });
+
                     }
                 }
-
+                if (this.bird.isAlive()) {
+                    try {
+                        for (Obstacle obstacle : this.obstacles) {
+                            obstacle.moveLeft();
+                        }
+                    } catch (ConcurrentModificationException e) {
+                        e.printStackTrace();
+                    }
+                }
                 repaint();
 
                 try {
@@ -105,5 +119,11 @@ public class MainScene extends JPanel {
         }).start();
     }
 
-
+    public void restart (){
+        this.remove(this.endGameWindow);
+        this.bird = new Bird(Color.YELLOW);
+        this.passedCounter = 0;
+        this.score.setText(""+this.passedCounter);
+        this.obstacles = new LinkedList<>();
+    }
 }

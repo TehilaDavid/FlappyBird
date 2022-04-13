@@ -5,16 +5,17 @@ public class Obstacle {
     private Pipe upper;
     private Pipe lower;
 
-    public static final int STAR_X = 1000;
+    public static final int START_X = 1000;
     public static final int SPACE_SIZE = 150;
     public static final int MIN_PIPE_HEIGHT = 50;
+    public static final int GROUND_HEIGHT = 104;
 
     public Obstacle () {
 
         Random random = new Random();
-        int randomHeight = random.nextInt(Window.WINDOW_HEIGHT - (SPACE_SIZE + MIN_PIPE_HEIGHT*2) ) + MIN_PIPE_HEIGHT;
-        this.upper = new Pipe(STAR_X,0,randomHeight,true);
-        this.lower = new Pipe(STAR_X, randomHeight + SPACE_SIZE ,Window.WINDOW_HEIGHT - (randomHeight + SPACE_SIZE),false);
+        int randomHeight = random.nextInt(Window.WINDOW_HEIGHT - (SPACE_SIZE + MIN_PIPE_HEIGHT*2 + GROUND_HEIGHT) ) + MIN_PIPE_HEIGHT;
+        this.upper = new Pipe(START_X,0,randomHeight,true);
+        this.lower = new Pipe(START_X, randomHeight + SPACE_SIZE ,Window.WINDOW_HEIGHT - (randomHeight + SPACE_SIZE) - GROUND_HEIGHT ,false);
     }
 
     public void paint (Graphics graphics) {
@@ -41,5 +42,13 @@ public class Obstacle {
 
     public Pipe getLower() {
         return lower;
+    }
+
+    public boolean isPassedBird (){
+        boolean isPassed = false;
+        if (this.upper.getSmallRectangle().getX() == Bird.X_HEAD){
+            isPassed = true;
+        }
+        return isPassed;
     }
 }

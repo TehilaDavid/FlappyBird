@@ -46,15 +46,17 @@ public abstract class Shape {
     }
 
     public void moveUp() {
-        new Thread(() -> {
-            for (int i = 0; i < 40; i++) {
-                this.y--;
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+        this.y--;
+
+//        new Thread(() -> {
+//            for (int i = 0; i < 40; i++) {
+//                this.y--;
+//                try {
+//                    Thread.sleep(1);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 }

@@ -13,39 +13,48 @@ public class Bird {
     public static final int X_HEAD = 100;
     public static final int Y_HEAD = 0;
     public static final int BODY_WIDTH = 50;
-    public static final int BODY_HEIGHT = 45;
+    public static final int BODY_HEIGHT = BODY_WIDTH-(BODY_WIDTH/10);
 
 
-    public Bird(Color color) {
-        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT, color);
-        this.wing = new Oval(X_HEAD - 10, Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - 10, (BODY_HEIGHT / 2), Color.GRAY);
-        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD - (Y_HEAD / 10), BODY_WIDTH / 2, BODY_WIDTH / 2, Color.WHITE);
-        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD - (Y_HEAD / 30), BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
-        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), BODY_HEIGHT / 3, BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
-        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), BODY_HEIGHT / 2, BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+    public Bird (Color color) {
+        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT,color);
+        this.wing = new Oval(X_HEAD - (BODY_WIDTH/4), Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - (BODY_WIDTH/5), (BODY_HEIGHT / 2),Color.GRAY);
+        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD, BODY_WIDTH / 2, BODY_WIDTH / 2,Color.WHITE);
+        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD+(BODY_WIDTH / 8) , BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
+        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD+(2*BODY_HEIGHT/5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD+(3*BODY_HEIGHT/5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
 
         this.alive = true;
     }
 
-
-    public void paint(Graphics graphics) {
-        if (this.alive) {
+    public void paint (Graphics graphics){
+        if (this.alive){
             this.body.paint(graphics);
-            this.wing.paint(graphics);
             this.lowerLip.paint(graphics);
             this.upperLip.paint(graphics);
             this.eye.paint(graphics);
             this.pupil.paint(graphics);
+            this.wing.paint(graphics);
         }
     }
 
     public void moveUp() {
-        this.body.moveUp();
-        this.wing.moveUp();
-        this.upperLip.moveUp();
-        this.lowerLip.moveUp();
-        this.eye.moveUp();
-        this.pupil.moveUp();
+        new Thread(() -> {
+            for (int i = 0; i < 40; i++) {
+                this.body.moveUp();
+                this.wing.moveUp();
+                this.upperLip.moveUp();
+                this.lowerLip.moveUp();
+                this.eye.moveUp();
+                this.pupil.moveUp();
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     public void moveDown() {
@@ -68,7 +77,6 @@ public class Bird {
     public int getUpperBird() {
         return (this.body.getY());
     }
-
 
     public boolean checkCollision(Obstacle obstacle) {
         boolean collision = false;
@@ -98,5 +106,7 @@ public class Bird {
         return collision;
     }
 
-
+    public boolean isAlive() {
+        return alive;
+    }
 }

@@ -24,6 +24,9 @@ public class Movement implements KeyListener {
 
 
     public void keyReleased(KeyEvent e) {
-
+//        int keyCode = e.getKeyCode();
+//        if (keyCode == KeyEvent.VK_SPACE) {
+//            this.bird.moveUp();
+//        }
     }
 }
