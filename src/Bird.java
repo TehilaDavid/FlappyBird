@@ -13,22 +13,22 @@ public class Bird {
     public static final int X_HEAD = 100;
     public static final int Y_HEAD = 0;
     public static final int BODY_WIDTH = 50;
-    public static final int BODY_HEIGHT = BODY_WIDTH-(BODY_WIDTH/10);
+    public static final int BODY_HEIGHT = BODY_WIDTH - (BODY_WIDTH / 10);
 
 
-    public Bird (Color color) {
-        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT,color);
-        this.wing = new Oval(X_HEAD - (BODY_WIDTH/4), Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - (BODY_WIDTH/5), (BODY_HEIGHT / 2),Color.GRAY);
-        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD, BODY_WIDTH / 2, BODY_WIDTH / 2,Color.WHITE);
-        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD+(BODY_WIDTH / 8) , BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
-        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD+(2*BODY_HEIGHT/5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
-        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD+(3*BODY_HEIGHT/5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+    public Bird(Color color) {
+        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT, color);
+        this.wing = new Oval(X_HEAD - (BODY_WIDTH / 4), Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - (BODY_WIDTH / 5), (BODY_HEIGHT / 2), Color.GRAY);
+        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD, BODY_WIDTH / 2, BODY_WIDTH / 2, Color.WHITE);
+        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD + (BODY_WIDTH / 8), BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
+        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (2 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
 
         this.alive = true;
     }
 
-    public void paint (Graphics graphics){
-        if (this.alive){
+    public void paint(Graphics graphics) {
+        if (this.alive) {
             this.body.paint(graphics);
             this.lowerLip.paint(graphics);
             this.upperLip.paint(graphics);
@@ -39,22 +39,14 @@ public class Bird {
     }
 
     public void moveUp() {
-        new Thread(() -> {
-            for (int i = 0; i < 40; i++) {
-                this.body.moveUp();
-                this.wing.moveUp();
-                this.upperLip.moveUp();
-                this.lowerLip.moveUp();
-                this.eye.moveUp();
-                this.pupil.moveUp();
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
+        for (int i = 0; i < 40; i++) {
+            this.body.moveUp();
+            this.wing.moveUp();
+            this.upperLip.moveUp();
+            this.lowerLip.moveUp();
+            this.eye.moveUp();
+            this.pupil.moveUp();
+        }
     }
 
     public void moveDown() {
@@ -108,5 +100,16 @@ public class Bird {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public void restart () {
+        this.alive = true;
+
+        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT, Color.YELLOW);
+        this.wing = new Oval(X_HEAD - (BODY_WIDTH / 4), Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - (BODY_WIDTH / 5), (BODY_HEIGHT / 2), Color.GRAY);
+        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD, BODY_WIDTH / 2, BODY_WIDTH / 2, Color.WHITE);
+        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD + (BODY_WIDTH / 8), BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
+        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (2 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
     }
 }

@@ -5,7 +5,8 @@ public class Movement implements KeyListener {
 
     private Bird bird;
 
-    public Movement (Bird bird) {
+
+    public Movement(Bird bird) {
         this.bird = bird;
     }
 
@@ -29,4 +30,5 @@ public class Movement implements KeyListener {
 //            this.bird.moveUp();
 //        }
     }
+
 }
