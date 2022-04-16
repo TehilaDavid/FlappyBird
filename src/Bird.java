@@ -1,5 +1,9 @@
 import java.awt.*;
 import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.util.Random;
 
 public class Bird {
     private Oval body;
@@ -9,6 +13,7 @@ public class Bird {
     private Oval upperLip;
     private Oval lowerLip;
     private boolean alive;
+
 
     public static final int X_HEAD = 100;
     public static final int Y_HEAD = 0;
@@ -24,6 +29,7 @@ public class Bird {
         this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (2 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
         this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
 
+
         this.alive = true;
     }
 
@@ -35,6 +41,23 @@ public class Bird {
             this.eye.paint(graphics);
             this.pupil.paint(graphics);
             this.wing.paint(graphics);
+
+
+//            Graphics2D g2 = (Graphics2D) graphics;
+//            int x = 50;
+//            int y = 75;
+//            int width = 200;
+//            int height = 100;
+//            Shape r1 = new Ellipse2D.Float (x, y, width, height);
+//            for (int angle = 0; angle <= 180; angle += 20) {
+//                g2.rotate(Math.toRadians(angle), x + width / 2, y + height / 2);
+//                g2.setPaint(Color.YELLOW);
+//                g2.fill(r1);
+//                g2.setStroke(new BasicStroke(4));
+//                g2.setPaint(Color.BLACK);
+//                g2.draw(r1);
+//            }
+
         }
     }
 
@@ -46,6 +69,8 @@ public class Bird {
             this.lowerLip.moveUp();
             this.eye.moveUp();
             this.pupil.moveUp();
+
+
         }
     }
 
@@ -102,7 +127,7 @@ public class Bird {
         return alive;
     }
 
-    public void restart () {
+    public void restart() {
         this.alive = true;
 
         this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT, Color.YELLOW);
@@ -111,5 +136,10 @@ public class Bird {
         this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD + (BODY_WIDTH / 8), BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
         this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (2 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
         this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+    }
+
+    public void jumpPosition () {
+        ///
+
     }
 }

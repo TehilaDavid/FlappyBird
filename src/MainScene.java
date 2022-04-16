@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
@@ -27,9 +30,12 @@ public class MainScene extends JPanel {
         this.score.setFont(scoreFont);
         this.score.setText("" + this.passedCounter);
         this.add(this.score);
+        this.endGameWindow = new EndGameWindow();
         this.mainGameLoop();
         this.obstacles = new LinkedList<>();
-        this.endGameWindow = new EndGameWindow();
+
+
+
 
 
 
@@ -46,8 +52,13 @@ public class MainScene extends JPanel {
                 obstacle.paint(g);
             }
         } catch (ConcurrentModificationException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
+
+
+
+
+
     }
 
     private void mainGameLoop() {
@@ -104,13 +115,16 @@ public class MainScene extends JPanel {
                     }
                 }
                 if (this.bird.isAlive()) {
-                    try {
+//                    try {
                         for (Obstacle obstacle : this.obstacles) {
-                            obstacle.moveLeft();
+                            if (obstacle != null) {
+                                obstacle.moveLeft();
+                            }
+//                        }
                         }
-                    } catch (ConcurrentModificationException e) {
-                        e.printStackTrace();
-                    }
+//                    } catch (ConcurrentModificationException e) {
+//                        System.out.println(e.getMessage());
+//                    }
                 }
                 repaint();
 

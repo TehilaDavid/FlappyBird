@@ -20,6 +20,7 @@ public class Movement implements KeyListener {
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_SPACE) {
             this.bird.moveUp();
+            this.bird.jumpPosition();
         }
     }
 

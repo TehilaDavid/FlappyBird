@@ -12,13 +12,13 @@ public class EndGameWindow extends JPanel {
     public static final int END_GAME_PANEL_WIDTH = 400;
     public static final int END_GAME_PANEL_HEIGHT = 200;
 
-    public EndGameWindow (){
+    public EndGameWindow() {
         this.isRestart = false;
         this.setBackground(Color.PINK);
         Border blackLine = BorderFactory.createLineBorder(Color.BLACK);
         this.setBorder(blackLine);
 
-        Font font = new Font("David",Font.BOLD, 45);
+        Font font = new Font("David", Font.BOLD, 45);
 
         this.currentScore = new JLabel();
         this.currentScore.setFont(font);
@@ -30,7 +30,7 @@ public class EndGameWindow extends JPanel {
         this.record.setText("Your record : ");
         this.add(this.record);
 
-        Font buttonFont = new Font("Ariel",Font.BOLD, 25);
+        Font buttonFont = new Font("Ariel", Font.BOLD, 25);
         this.restart = new JButton();
         this.restart.setFont(buttonFont);
         this.restart.setText("RESTART");
@@ -39,11 +39,11 @@ public class EndGameWindow extends JPanel {
 
     }
 
-    public void setEndGamePanel (int currentScore, int record){
-        this.setBounds((Window.MAIN_SCENE_WIDTH/2) - (END_GAME_PANEL_WIDTH / 2), (Window.MAIN_SCENE_HEIGHT/2) - ((3*END_GAME_PANEL_HEIGHT)/4) , END_GAME_PANEL_WIDTH , END_GAME_PANEL_HEIGHT);
-        this.currentScore.setBounds(END_GAME_PANEL_WIDTH / 8,END_GAME_PANEL_HEIGHT/10, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT/5);
-        this.record.setBounds(END_GAME_PANEL_WIDTH / 8, 7*END_GAME_PANEL_HEIGHT / 20 , END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
-        this.restart.setBounds(END_GAME_PANEL_WIDTH / 4, 13*END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH / 2, END_GAME_PANEL_HEIGHT / 5);
+    public void setEndGamePanel(int currentScore, int record) {
+        this.setBounds((Window.MAIN_SCENE_WIDTH / 2) - (END_GAME_PANEL_WIDTH / 2), (Window.MAIN_SCENE_HEIGHT / 2) - ((3 * END_GAME_PANEL_HEIGHT) / 4), END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT);
+        this.currentScore.setBounds(END_GAME_PANEL_WIDTH / 8, END_GAME_PANEL_HEIGHT / 10, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
+        this.record.setBounds(END_GAME_PANEL_WIDTH / 8, 7 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
+        this.restart.setBounds(END_GAME_PANEL_WIDTH / 4, 13 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH / 2, END_GAME_PANEL_HEIGHT / 5);
         this.currentScore.setText("Your score : " + currentScore);
         this.record.setText("Your record : " + record);
     }
