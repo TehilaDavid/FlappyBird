@@ -1,8 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
@@ -18,7 +15,6 @@ public class MainScene extends JPanel {
     private EndGameWindow endGameWindow;
 
 
-
     public MainScene(int x, int y, int width, int height) {
         this.setBounds(x, y, width, height);
         this.bird = new Bird(Color.YELLOW);
@@ -30,14 +26,9 @@ public class MainScene extends JPanel {
         this.score.setFont(scoreFont);
         this.score.setText("" + this.passedCounter);
         this.add(this.score);
-        this.endGameWindow = new EndGameWindow();
+
         this.mainGameLoop();
         this.obstacles = new LinkedList<>();
-
-
-
-
-
 
     }
 
@@ -45,46 +36,22 @@ public class MainScene extends JPanel {
         super.paintComponent(g);
         this.background = new ImageIcon("background.png");
         this.background.paintIcon(this, g, 0, -50);
-
         this.bird.paint(g);
+
         try {
             for (Obstacle obstacle : this.obstacles) {
                 obstacle.paint(g);
             }
         } catch (ConcurrentModificationException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
-
-
-
-
+        if (this.endGameWindow != null) {
+            this.endGameWindow.boundarySettings();
+        }
     }
 
     private void mainGameLoop() {
-        new Thread(() -> {
-            this.setFocusable(true);
-            this.requestFocus();
-
-            while (true) {
-                if (this.bird.isAlive()) {
-                    this.obstacles.add(new Obstacle());
-                    if (this.obstacles.getFirst().end()) {
-                        this.obstacles.removeFirst();
-                    }
-                }
-                repaint();
-
-                try {
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-
-
         new Thread(() -> {
             this.setFocusable(true);
             this.requestFocus();
@@ -106,26 +73,36 @@ public class MainScene extends JPanel {
                         if (this.playerRecord < this.passedCounter) {
                             this.playerRecord = this.passedCounter;
                         }
-                        this.endGameWindow.setEndGamePanel(this.passedCounter, this.playerRecord);
-                        this.add(this.endGameWindow);
 
-                        this.endGameWindow.getRestart().addActionListener((event) -> {
-                            restart();
-                        });
+                        if (this.endGameWindow == null) {
+                            this.endGameWindow = new EndGameWindow(this.passedCounter, this.playerRecord);
+                            this.add(this.endGameWindow);
+                            this.endGameWindow.boundarySettings();
+                        }
+
+
+                        if (this.endGameWindow != null) {
+                            this.endGameWindow.getRestart().addActionListener((event) -> {
+                                restart();
+                            });
+                        }
+
+
+
+
                     }
                 }
-                if (this.bird.isAlive()) {
-//                    try {
+//                if (this.bird.isAlive()) {
+                    try {
                         for (Obstacle obstacle : this.obstacles) {
                             if (obstacle != null) {
                                 obstacle.moveLeft();
                             }
-//                        }
                         }
-//                    } catch (ConcurrentModificationException e) {
-//                        System.out.println(e.getMessage());
-//                    }
-                }
+                    } catch (ConcurrentModificationException e) {
+                        e.printStackTrace();
+                    }
+//                }
                 repaint();
 
                 try {
@@ -136,13 +113,41 @@ public class MainScene extends JPanel {
             }
         }).start();
 
+
+
+        new Thread(() -> {
+            this.setFocusable(true);
+            this.requestFocus();
+
+            while (true) {
+                if (this.bird.isAlive()) {
+                    this.obstacles.add(new Obstacle());
+                    if (this.obstacles.getFirst().end()) {
+                        this.obstacles.removeFirst();
+                    }
+                }
+                repaint();
+
+                try {
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
     }
 
     public void restart() {
-        this.remove(this.endGameWindow);
+        if (this.endGameWindow != null) {
+            this.remove(this.endGameWindow);
+            this.endGameWindow.boundarySettings();
+        }
+        this.endGameWindow = null;
         this.passedCounter = 0;
         this.bird.restart();
         this.score.setText("" + this.passedCounter);
         this.obstacles = new LinkedList<>();
+
     }
 }

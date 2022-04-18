@@ -12,8 +12,22 @@ public class EndGameWindow extends JPanel {
     public static final int END_GAME_PANEL_WIDTH = 400;
     public static final int END_GAME_PANEL_HEIGHT = 200;
 
-    public EndGameWindow() {
+    public EndGameWindow(int currentScore, int record) {
         this.isRestart = false;
+        drawOnPanel();
+        boundarySettings();
+        this.currentScore.setText("Your score : " + currentScore);
+        this.record.setText("Your record : " + record);
+    }
+
+    public void boundarySettings () {
+        this.setBounds((Window.MAIN_SCENE_WIDTH / 2) - (END_GAME_PANEL_WIDTH / 2), (Window.MAIN_SCENE_HEIGHT / 2) - ((3 * END_GAME_PANEL_HEIGHT) / 4), END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT);
+        this.currentScore.setBounds(END_GAME_PANEL_WIDTH / 8, END_GAME_PANEL_HEIGHT / 10, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
+        this.record.setBounds(END_GAME_PANEL_WIDTH / 8, 7 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
+        this.restart.setBounds(END_GAME_PANEL_WIDTH / 4, 13 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH / 2, END_GAME_PANEL_HEIGHT / 5);
+    }
+
+    private void drawOnPanel() {
         this.setBackground(Color.PINK);
         Border blackLine = BorderFactory.createLineBorder(Color.BLACK);
         this.setBorder(blackLine);
@@ -36,16 +50,6 @@ public class EndGameWindow extends JPanel {
         this.restart.setText("RESTART");
         this.restart.setBackground(Color.WHITE);
         this.add(restart);
-
-    }
-
-    public void setEndGamePanel(int currentScore, int record) {
-        this.setBounds((Window.MAIN_SCENE_WIDTH / 2) - (END_GAME_PANEL_WIDTH / 2), (Window.MAIN_SCENE_HEIGHT / 2) - ((3 * END_GAME_PANEL_HEIGHT) / 4), END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT);
-        this.currentScore.setBounds(END_GAME_PANEL_WIDTH / 8, END_GAME_PANEL_HEIGHT / 10, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
-        this.record.setBounds(END_GAME_PANEL_WIDTH / 8, 7 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
-        this.restart.setBounds(END_GAME_PANEL_WIDTH / 4, 13 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH / 2, END_GAME_PANEL_HEIGHT / 5);
-        this.currentScore.setText("Your score : " + currentScore);
-        this.record.setText("Your record : " + record);
     }
 
     public JButton getRestart() {
