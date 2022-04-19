@@ -5,6 +5,7 @@ public class Movement implements KeyListener {
 
     private Bird bird;
     private boolean start;
+    private boolean moveUp;
 
 
 
@@ -19,11 +20,13 @@ public class Movement implements KeyListener {
     }
 
 
+
+
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_SPACE) {
-            this.bird.moveUp();
             this.start = true;
+            this.bird.moveUp();
         }
     }
 

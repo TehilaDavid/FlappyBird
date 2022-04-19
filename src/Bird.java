@@ -1,9 +1,5 @@
 import java.awt.*;
 import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.util.Random;
 
 public class Bird {
     private Oval body;
@@ -60,16 +56,6 @@ public class Bird {
         }
     }
 
-    public void moveUp() {
-        for (int i = 0; i < 40; i++) {
-            this.body.moveUp();
-            this.wing.moveUp();
-            this.upperLip.moveUp();
-            this.lowerLip.moveUp();
-            this.eye.moveUp();
-            this.pupil.moveUp();
-        }
-    }
 
     public void moveUpSlow() {
         this.body.moveUp();
@@ -90,14 +76,6 @@ public class Bird {
 
     }
 
-    public void moveDown() {
-        this.body.moveDown();
-        this.wing.moveDown();
-        this.upperLip.moveDown();
-        this.lowerLip.moveDown();
-        this.eye.moveDown();
-        this.pupil.moveDown();
-    }
 
     public void kill() {
         this.alive = false;
@@ -158,4 +136,39 @@ public class Bird {
         ///
 
     }
+
+
+    public void moveUp() {
+        new Thread(() -> {
+            for (int i = 0; i < 40; i++) {
+                this.body.moveUp();
+                setBird(this.body.getY());
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+
+    public void moveDown() {
+        this.body.moveDown();
+        setBird(this.body.getY());
+    }
+
+    private void setBird (int y){
+        this.wing.setY(y + (BODY_HEIGHT / 3));
+        this.eye.setY(y);
+        this.pupil.setY(y+(BODY_HEIGHT / 8));
+        this.upperLip.setY(y+(2*BODY_HEIGHT/5));
+        this.lowerLip.setY(y+(3*BODY_HEIGHT/5));
+    }
+
+
+
+
+
+
 }

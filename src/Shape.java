@@ -49,4 +49,8 @@ public abstract class Shape {
     public void moveUp() {
         this.y--;
     }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }
