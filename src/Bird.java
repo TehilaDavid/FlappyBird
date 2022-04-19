@@ -14,11 +14,10 @@ public class Bird {
     private Oval lowerLip;
     private boolean alive;
 
-
-    public static final int X_HEAD = 100;
-    public static final int Y_HEAD = 0;
     public static final int BODY_WIDTH = 50;
     public static final int BODY_HEIGHT = BODY_WIDTH - (BODY_WIDTH / 10);
+    public static final int X_HEAD = 100;
+    public static final int Y_HEAD = (((Window.MAIN_SCENE_HEIGHT - Obstacle.GROUND_HEIGHT) / 2) - BODY_HEIGHT);
 
 
     public Bird(Color color) {
@@ -69,9 +68,26 @@ public class Bird {
             this.lowerLip.moveUp();
             this.eye.moveUp();
             this.pupil.moveUp();
-
-
         }
+    }
+
+    public void moveUpSlow() {
+        this.body.moveUp();
+        this.wing.moveUp();
+        this.upperLip.moveUp();
+        this.lowerLip.moveUp();
+        this.eye.moveUp();
+        this.pupil.moveUp();
+    }
+
+    public void moveDownSlow() {
+        this.body.moveDown();
+        this.wing.moveDown();
+        this.upperLip.moveDown();
+        this.lowerLip.moveDown();
+        this.eye.moveDown();
+        this.pupil.moveDown();
+
     }
 
     public void moveDown() {
@@ -138,7 +154,7 @@ public class Bird {
         this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
     }
 
-    public void jumpPosition () {
+    public void jumpPosition() {
         ///
 
     }

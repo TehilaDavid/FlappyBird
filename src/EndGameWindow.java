@@ -6,7 +6,7 @@ public class EndGameWindow extends JPanel {
 
     private JLabel currentScore;
     private JLabel record;
-    private JButton restart;
+    private JButton restartButton;
     private boolean isRestart;
 
     public static final int END_GAME_PANEL_WIDTH = 400;
@@ -16,7 +16,7 @@ public class EndGameWindow extends JPanel {
         this.isRestart = false;
         drawOnPanel();
         boundarySettings();
-        this.currentScore.setText("Your score : " + currentScore);
+        this.currentScore.setText("Your score :  " + currentScore);
         this.record.setText("Your record : " + record);
     }
 
@@ -24,7 +24,7 @@ public class EndGameWindow extends JPanel {
         this.setBounds((Window.MAIN_SCENE_WIDTH / 2) - (END_GAME_PANEL_WIDTH / 2), (Window.MAIN_SCENE_HEIGHT / 2) - ((3 * END_GAME_PANEL_HEIGHT) / 4), END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT);
         this.currentScore.setBounds(END_GAME_PANEL_WIDTH / 8, END_GAME_PANEL_HEIGHT / 10, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
         this.record.setBounds(END_GAME_PANEL_WIDTH / 8, 7 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH, END_GAME_PANEL_HEIGHT / 5);
-        this.restart.setBounds(END_GAME_PANEL_WIDTH / 4, 13 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH / 2, END_GAME_PANEL_HEIGHT / 5);
+        this.restartButton.setBounds(END_GAME_PANEL_WIDTH / 4, 13 * END_GAME_PANEL_HEIGHT / 20, END_GAME_PANEL_WIDTH / 2, END_GAME_PANEL_HEIGHT / 5);
     }
 
     private void drawOnPanel() {
@@ -32,7 +32,7 @@ public class EndGameWindow extends JPanel {
         Border blackLine = BorderFactory.createLineBorder(Color.BLACK);
         this.setBorder(blackLine);
 
-        Font font = new Font("David", Font.BOLD, 45);
+        Font font = new Font("DialogInput", Font.BOLD, 35);
 
         this.currentScore = new JLabel();
         this.currentScore.setFont(font);
@@ -44,15 +44,15 @@ public class EndGameWindow extends JPanel {
         this.record.setText("Your record : ");
         this.add(this.record);
 
-        Font buttonFont = new Font("Ariel", Font.BOLD, 25);
-        this.restart = new JButton();
-        this.restart.setFont(buttonFont);
-        this.restart.setText("RESTART");
-        this.restart.setBackground(Color.WHITE);
-        this.add(restart);
+        Font buttonFont = new Font("DialogInput", Font.BOLD, 30);
+        this.restartButton = new JButton();
+        this.restartButton.setFont(buttonFont);
+        this.restartButton.setText("RESTART");
+        this.restartButton.setBackground(Color.WHITE);
+        this.add(restartButton);
     }
 
     public JButton getRestart() {
-        return restart;
+        return restartButton;
     }
 }

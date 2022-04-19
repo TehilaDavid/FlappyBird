@@ -41,22 +41,12 @@ public abstract class Shape {
     public void moveDown() {
         this.y++;
     }
+
     public void moveLeft() {
         this.x--;
     }
 
     public void moveUp() {
         this.y--;
-
-//        new Thread(() -> {
-//            for (int i = 0; i < 40; i++) {
-//                this.y--;
-//                try {
-//                    Thread.sleep(1);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 }
