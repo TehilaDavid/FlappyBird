@@ -47,7 +47,7 @@ public class MainScene extends JPanel {
         this.pressToStart.setForeground(Color.WHITE);
 
         this.music = new Music();
-        this.music.setFile("songg.wav");
+        this.music.setFile("song.wav");
         this.music.play();
 
         this.playerRecord = 0;
