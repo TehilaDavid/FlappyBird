@@ -22,6 +22,10 @@ public abstract class Shape {
         return x;
     }
 
+    protected void setY(int y) {
+        this.y = y;
+    }
+
     protected int getY() {
         return y;
     }
@@ -34,6 +38,10 @@ public abstract class Shape {
         return height;
     }
 
+    protected void setColor(Color color){
+        this.color = color;
+    }
+
     protected Color getColor() {
         return color;
     }
@@ -42,15 +50,11 @@ public abstract class Shape {
         this.y++;
     }
 
-    public void moveLeft() {
-        this.x--;
-    }
-
     public void moveUp() {
         this.y--;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void moveLeft() {
+        this.x--;
     }
 }

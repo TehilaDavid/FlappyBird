@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.Rectangle;
+import java.util.Random;
 
 public class Bird {
     private Oval body;
@@ -8,81 +9,72 @@ public class Bird {
     private Oval pupil;
     private Oval upperLip;
     private Oval lowerLip;
+
     private boolean alive;
+    private Random random;
+    public static final Color[] colors = new Color[]{Color.WHITE, Color.RED, Color.YELLOW, Color.ORANGE, Color.LIGHT_GRAY};
 
     public static final int BODY_WIDTH = 50;
-    public static final int BODY_HEIGHT = BODY_WIDTH - (BODY_WIDTH / 10);
+    public static final int BODY_HEIGHT = BODY_WIDTH-(BODY_WIDTH/10);
     public static final int X_HEAD = 100;
     public static final int Y_HEAD = (((Window.MAIN_SCENE_HEIGHT - Obstacle.GROUND_HEIGHT) / 2) - BODY_HEIGHT);
 
 
-    public Bird(Color color) {
-        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT, color);
-        this.wing = new Oval(X_HEAD - (BODY_WIDTH / 4), Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - (BODY_WIDTH / 5), (BODY_HEIGHT / 2), Color.GRAY);
-        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD, BODY_WIDTH / 2, BODY_WIDTH / 2, Color.WHITE);
-        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD + (BODY_WIDTH / 8), BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
-        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (2 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
-        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+    public Bird () {
+        this.random = new Random();
+        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT, this.colors[random.nextInt(this.colors.length)]);
 
+        this.wing = new Oval(X_HEAD - (BODY_WIDTH/4), Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - (BODY_WIDTH/5), (BODY_HEIGHT / 2),Color.GRAY);
+        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD, BODY_WIDTH / 2, BODY_WIDTH / 2,Color.WHITE);
+        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD +(BODY_HEIGHT / 8) , BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
+        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD +(2*BODY_HEIGHT/5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
+        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD +(3*BODY_HEIGHT/5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
 
         this.alive = true;
     }
 
-    public void paint(Graphics graphics) {
-        if (this.alive) {
-            this.body.paint(graphics);
-            this.lowerLip.paint(graphics);
-            this.upperLip.paint(graphics);
-            this.eye.paint(graphics);
-            this.pupil.paint(graphics);
-            this.wing.paint(graphics);
+    public void paint (Graphics graphics){
+//        if (this.alive){
+        this.body.paint(graphics);
+        this.lowerLip.paint(graphics);
+        this.upperLip.paint(graphics);
+        this.eye.paint(graphics);
+        this.pupil.paint(graphics);
+        this.wing.paint(graphics);
+//        }
+    }
 
-
-//            Graphics2D g2 = (Graphics2D) graphics;
-//            int x = 50;
-//            int y = 75;
-//            int width = 200;
-//            int height = 100;
-//            Shape r1 = new Ellipse2D.Float (x, y, width, height);
-//            for (int angle = 0; angle <= 180; angle += 20) {
-//                g2.rotate(Math.toRadians(angle), x + width / 2, y + height / 2);
-//                g2.setPaint(Color.YELLOW);
-//                g2.fill(r1);
-//                g2.setStroke(new BasicStroke(4));
-//                g2.setPaint(Color.BLACK);
-//                g2.draw(r1);
+    public void moveUp() {
+//        new Thread(() -> {
+//            for (int i = 0; i < 60; i++) {
+        this.body.moveUp();
+        setYBird(this.body.getY());
+//                try {
+//                    Thread.sleep(2);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 //            }
+//        }).start();
+    }
 
+    public void moveDown() {
+        if (!isTouchGround()){
+            this.body.moveDown();
+            setYBird(this.body.getY());
         }
     }
 
-
-    public void moveUpSlow() {
-        this.body.moveUp();
-        this.wing.moveUp();
-        this.upperLip.moveUp();
-        this.lowerLip.moveUp();
-        this.eye.moveUp();
-        this.pupil.moveUp();
+    public boolean isTouchGround(){
+        return (getLowerBird() >= (Window.MAIN_SCENE_HEIGHT - Obstacle.GROUND_HEIGHT));
     }
-
-    public void moveDownSlow() {
-        this.body.moveDown();
-        this.wing.moveDown();
-        this.upperLip.moveDown();
-        this.lowerLip.moveDown();
-        this.eye.moveDown();
-        this.pupil.moveDown();
-
-    }
-
 
     public void kill() {
         this.alive = false;
     }
 
     public int getLowerBird() {
-        return (this.body.getY() + this.body.getHeight());
+        return (this.body.getY() + BODY_HEIGHT);
     }
 
     public int getUpperBird() {
@@ -121,54 +113,19 @@ public class Bird {
         return alive;
     }
 
-    public void restart() {
+    public void restart (){
+        this.body.setY(Y_HEAD);
+        this.body.setColor(this.colors[this.random.nextInt(this.colors.length)]);
+        setYBird(Y_HEAD);
         this.alive = true;
-
-        this.body = new Oval(X_HEAD, Y_HEAD, BODY_WIDTH, BODY_HEIGHT, Color.YELLOW);
-        this.wing = new Oval(X_HEAD - (BODY_WIDTH / 4), Y_HEAD + (BODY_HEIGHT / 3), BODY_WIDTH - (BODY_WIDTH / 5), (BODY_HEIGHT / 2), Color.GRAY);
-        this.eye = new Oval(X_HEAD + (BODY_WIDTH / 2), Y_HEAD, BODY_WIDTH / 2, BODY_WIDTH / 2, Color.WHITE);
-        this.pupil = new Oval((X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4)), Y_HEAD + (BODY_WIDTH / 8), BODY_WIDTH / 5, BODY_HEIGHT / 3, Color.BLACK);
-        this.upperLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (2 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
-        this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
     }
 
-    public void jumpPosition() {
-        ///
-
-    }
-
-
-    public void moveUp() {
-        new Thread(() -> {
-            for (int i = 0; i < 40; i++) {
-                this.body.moveUp();
-                setBird(this.body.getY());
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-    }
-
-    public void moveDown() {
-        this.body.moveDown();
-        setBird(this.body.getY());
-    }
-
-    private void setBird (int y){
+    private void setYBird(int y){
+//        this.body.setY(y);
         this.wing.setY(y + (BODY_HEIGHT / 3));
         this.eye.setY(y);
         this.pupil.setY(y+(BODY_HEIGHT / 8));
         this.upperLip.setY(y+(2*BODY_HEIGHT/5));
         this.lowerLip.setY(y+(3*BODY_HEIGHT/5));
     }
-
-
-
-
-
-
 }
