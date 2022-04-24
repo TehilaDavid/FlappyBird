@@ -14,6 +14,7 @@ public class Bird {
     private Random random;
     public static final Color[] colors = new Color[]{Color.WHITE, Color.RED, Color.YELLOW, Color.ORANGE, Color.LIGHT_GRAY};
 
+
     public static final int BODY_WIDTH = 50;
     public static final int BODY_HEIGHT = BODY_WIDTH - (BODY_WIDTH / 10);
     public static final int X_HEAD = 100;
