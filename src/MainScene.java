@@ -1,5 +1,10 @@
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.TargetDataLine;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
@@ -21,6 +26,7 @@ public class MainScene extends JPanel {
     private JLabel pressToStart;
 
     private boolean isObstaclesListRunning;
+    private Music music;
 
     public static final int  BIRD_VIBRATION_TIME_LOOP = 20;
     public static  final int MOVE_TIME_LOOP = 5;
@@ -40,6 +46,10 @@ public class MainScene extends JPanel {
         this.pressToStart.setFont(font);
         this.pressToStart.setForeground(Color.WHITE);
 
+        this.music = new Music();
+        this.music.setFile("songg.wav");
+        this.music.play();
+
         this.playerRecord = 0;
         this.passedCounter = 0;
         this.score = new JLabel();
@@ -52,6 +62,18 @@ public class MainScene extends JPanel {
         this.mainGameLoop();
 
 //        this.endGameWindow = new EndGameWindow();
+    }
+
+    private void playMusic (String filepath){
+        InputStream music;
+        try {
+            music = new FileInputStream(new File(filepath));
+            AudioInputStream audios = new AudioInputStream((TargetDataLine) music);
+            ((TargetDataLine) music).start();
+
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"error");
+        }
     }
 
     protected void paintComponent(Graphics g) {
