@@ -12,6 +12,7 @@ public class Bird {
 
     private boolean alive;
     private Random random;
+
     public static final Color[] colors = new Color[]{Color.WHITE, Color.RED, Color.YELLOW, Color.ORANGE, Color.LIGHT_GRAY};
 
 
@@ -32,6 +33,7 @@ public class Bird {
         this.lowerLip = new Oval(X_HEAD + (BODY_WIDTH / 2) + (BODY_WIDTH / 4), Y_HEAD + (3 * BODY_HEIGHT / 5), BODY_WIDTH / 2, BODY_HEIGHT / 4, Color.PINK);
 
         this.alive = true;
+
     }
 
     public void paint(Graphics graphics) {
@@ -52,6 +54,8 @@ public class Bird {
         if (!isTouchGround()) {
             this.body.moveDown();
             setYBird(this.body.getY());
+        }else if (this.alive) {
+
         }
     }
 
