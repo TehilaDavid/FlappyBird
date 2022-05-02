@@ -1,10 +1,6 @@
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.TargetDataLine;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
@@ -26,13 +22,18 @@ public class MainScene extends JPanel {
     private JLabel pressToStart;
 
     private boolean isObstaclesListRunning;
-    private Music music;
+
     private Music addPointSound;
     private Music collisionSound;
     private boolean birdCollided;
+    private Music music;
+    private boolean songActivated;
 
-    public static final int BIRD_VIBRATION_TIME_LOOP = 20;
-    public static final int MOVE_TIME_LOOP = 5;
+    public static final int BACKGROUND_X = 0;
+    public static final int BACKGROUND_Y = -50;
+
+    public static final int  BIRD_VIBRATION_TIME_LOOP = 20;
+    public static  final int MOVE_TIME_LOOP = 5;
 
     public MainScene(int x, int y, int width, int height) {
         this.setBounds(x, y, width, height);
@@ -45,53 +46,49 @@ public class MainScene extends JPanel {
 
         this.counterUpDownTime = 0;
         this.pressToStart = new JLabel("Press 'Space' To Start");
-        this.pressToStart.setBounds(Window.MAIN_SCENE_WIDTH / 4, Bird.Y_HEAD, 2 * Window.MAIN_SCENE_WIDTH / 3, Window.MAIN_SCENE_HEIGHT / 10);
+        pressToStartSetBounds();
         this.pressToStart.setFont(font);
         this.pressToStart.setForeground(Color.WHITE);
-
-        this.music = new Music();
-        this.music.setFile("song.wav");
-        this.music.play();
-        this.addPointSound = new Music();
-        this.collisionSound = new Music();
-
 
         this.playerRecord = 0;
         this.passedCounter = 0;
         this.score = new JLabel();
-        this.score.setBounds((Window.MAIN_SCENE_WIDTH / 2) - 15, 5, 50, 60);
+        this.score.setBounds((Window.MAIN_SCENE_WIDTH/2)-15,5, 50,60);
         this.score.setFont(font);
-        this.score.setText("" + this.passedCounter);
+        this.score.setText(""+this.passedCounter);
         this.add(this.score);
+
+        this.music = new Music("song.wav");
+        this.addPointSound = new Music("point.wav");
+        this.collisionSound = new Music("collision sound.wav");
 
         this.movement = new Movement(this.bird);
         this.mainGameLoop();
     }
 
-    private void playMusic(String filepath) {
-        InputStream music;
-        try {
-            music = new FileInputStream(new File(filepath));
-            new AudioInputStream((TargetDataLine) music);
-            ((TargetDataLine) music).start();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "error");
-        }
+    private void pressToStartSetBounds(){
+        this.pressToStart.setBounds(Window.MAIN_SCENE_WIDTH / 4, Bird.Y_HEAD, 2 * Window.MAIN_SCENE_WIDTH / 3, Window.MAIN_SCENE_HEIGHT / 10);
     }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.background = new ImageIcon("background.png");
-        this.background.paintIcon(this, g, 0, -50);
+        this.background.paintIcon(this, g, BACKGROUND_X, BACKGROUND_Y);
         try {
-            this.isObstaclesListRunning = true;
-            for (Obstacle obstacle : this.obstacles) {
-                obstacle.paint(g);
+
+            if (!this.isObstaclesListRunning){
+                this.isObstaclesListRunning = true;
+                for (Obstacle obstacle : this.obstacles) {
+                    if (obstacle != null){
+                        obstacle.paint(g);
+                    }
+                }
+                this.isObstaclesListRunning = false;
             }
-            this.isObstaclesListRunning = false;
-        } catch (ConcurrentModificationException e) {
+        }catch (ConcurrentModificationException e) {
             e.printStackTrace();
         }
+
         this.bird.paint(g);
 
         if (this.endGameWindow != null) {
@@ -105,20 +102,16 @@ public class MainScene extends JPanel {
         moveLoop();
     }
 
-    private void obstacleListLoop() {
+    private void obstacleListLoop (){
         new Thread(() -> {
             this.setFocusable(true);
             this.requestFocus();
 
             while (true) {
                 Obstacle obstacle = new Obstacle();
-                if (this.bird.isAlive() && this.start && !this.isObstaclesListRunning) {
+                if (this.start && this.bird.isAlive() && !this.isObstaclesListRunning) {
                     this.obstacles.add(obstacle);
-//                    if (this.obstacles.getFirst().end()) {
-//                        this.obstacles.removeFirst();
-//                    }
                     repaint();
-
                     try {
                         Thread.sleep(MOVE_TIME_LOOP * 300);
                     } catch (InterruptedException e) {
@@ -129,14 +122,14 @@ public class MainScene extends JPanel {
         }).start();
     }
 
-    private void moveLoop() {
+    private void moveLoop(){
         new Thread(() -> {
             this.setFocusable(true);
             this.requestFocus();
             this.addKeyListener(this.movement);
             while (true) {
                 this.start = this.movement.isStart();
-                if (this.start) {
+                if (this.start){
                     this.bird.moveDown();
                     obstaclesMoveLeft();
                     tests();
@@ -151,47 +144,48 @@ public class MainScene extends JPanel {
         }).start();
     }
 
-    private void tests() {
+    private void tests(){
         if (!this.obstacles.isEmpty()) {
             if (this.obstacles.getFirst().end() && !this.isObstaclesListRunning) {
                 this.obstacles.removeFirst();
             }
-            if (this.obstacles.getFirst().isPassedBird()) {
+            if (this.obstacles.getFirst().isPassedBird() && this.bird.isAlive()) {
                 this.passedCounter++;
-
-                this.addPointSound.setFile("point.wav");
                 this.addPointSound.play();
-
                 this.score.setText("" + this.passedCounter);
             }
             if (this.bird.isTouchGround() || this.bird.getUpperBird() <= Window.Y_MAIN_SCENE ||
                     this.bird.checkCollision(this.obstacles.getFirst())) {
-
+                if (this.songActivated){
+                    try {
+                        this.music.stop();
+                        this.songActivated = false;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 if (!birdCollided) {
-                    this.collisionSound.setFile("collision sound.wav");
                     this.collisionSound.play();
                     birdCollided = true;
                 }
                 this.bird.kill();
                 this.score.setText("Game Over");
-                if (this.playerRecord < this.passedCounter) {
+                if (this.playerRecord < this.passedCounter){
                     this.playerRecord = this.passedCounter;
                 }
-                if (this.endGameWindow == null) {
-//                    this.endGameWindow.setEndGamePanel(this.passedCounter, this.playerRecord);
+                if (this.endGameWindow == null){
                     this.endGameWindow = new EndGameWindow(this.passedCounter, this.playerRecord);
-                    this.add(this.endGameWindow);
                     this.endGameWindow.boundarySettings();
-                } else {
-                    this.endGameWindow.getRestartButton().addActionListener((event) -> {
-                        restart();
-                    });
+                    this.add(this.endGameWindow);
+                }else if (this.endGameWindow.isRestart()) {
+                    restart();
                 }
             }
         }
     }
 
-    private void restart() {
+    private void restart (){
+        this.start = false;
         if (this.endGameWindow != null) {
             this.remove(this.endGameWindow);
             this.endGameWindow.boundarySettings();
@@ -199,38 +193,49 @@ public class MainScene extends JPanel {
         }
         this.bird.restart();
         this.passedCounter = 0;
-        this.score.setText("" + this.passedCounter);
-        if (!this.isObstaclesListRunning) {
-            this.obstacles.clear();
+        this.score.setText(""+this.passedCounter);
+        while (!this.obstacles.isEmpty()){
+            if (!this.isObstaclesListRunning){
+                this.obstacles.clear();
+            }
         }
         this.movement.setStart(false);
-        this.pressToStart.setBounds(Window.MAIN_SCENE_WIDTH / 4, Bird.Y_HEAD, 2 * Window.MAIN_SCENE_WIDTH / 3, Window.MAIN_SCENE_HEIGHT / 10);
+        pressToStartSetBounds();
         this.birdCollided = false;
+
     }
 
-    private void obstaclesMoveLeft() {
+    private void obstaclesMoveLeft(){
         if (this.bird.isAlive() && this.start) {
             try {
-                this.isObstaclesListRunning = true;
-                for (Obstacle obstacle : this.obstacles) {
-                    if (obstacle != null) {
-                        obstacle.moveLeft();
+                if (!this.isObstaclesListRunning){
+                    this.isObstaclesListRunning = true;
+                    for (Obstacle obstacle : this.obstacles) {
+                        if (obstacle != null){
+                            obstacle.moveLeft();
+                        }
                     }
+                    this.isObstaclesListRunning = false;
                 }
-                this.isObstaclesListRunning = false;
             } catch (ConcurrentModificationException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void birdVibrationLoop() {
+    private void birdVibrationLoop(){
         new Thread(() -> {
+            this.setFocusable(true);
+            this.requestFocus();
 
             boolean isPressVisible = false;
 
             while (true) {
                 if (!this.start) {
+                    if (!this.songActivated){
+                        this.music.play();
+                        this.songActivated = true;
+                    }
                     if (counterUpDownTime % 2 == 0) {
                         this.bird.moveDown();
                     } else {
@@ -259,7 +264,7 @@ public class MainScene extends JPanel {
 
             while (true) {
                 if (!this.start) {
-                    this.counterUpDownTime++;
+                    this.counterUpDownTime ++;
                 }
                 try {
                     Thread.sleep(BIRD_VIBRATION_TIME_LOOP * 20);

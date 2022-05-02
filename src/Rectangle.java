@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Rectangle extends Shape {
 
@@ -12,6 +11,5 @@ public class Rectangle extends Shape {
         graphics.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         graphics.setColor(Color.BLACK);
         graphics.drawRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-
     }
 }

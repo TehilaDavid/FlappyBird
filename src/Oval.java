@@ -6,12 +6,10 @@ public class Oval extends Shape {
         super(x, y, width, height, color);
     }
 
-    public void paint(Graphics graphics) {
+    public void paint (Graphics graphics){
         graphics.setColor(this.getColor());
         graphics.fillOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         graphics.setColor(Color.BLACK);
         graphics.drawOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
-
-
 }

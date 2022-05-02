@@ -5,15 +5,18 @@ public class Pipe {
     private Rectangle smallRectangle;
 
     public static final int BIG_REC_WIDTH = 60;
+    public static final int SMALL_REC_HEIGHT = 20;
 
 
     public Pipe(int x, int y, int height, boolean isSmallDown) {
         this.bigRectangle = new Rectangle(x, y, BIG_REC_WIDTH, height, Color.GREEN);
+        int ySmallRectangle;
         if (isSmallDown) {
-            this.smallRectangle = new Rectangle(x - 5, y + height, BIG_REC_WIDTH + 10, 20, Color.green);
+            ySmallRectangle = y + height;
         } else {
-            this.smallRectangle = new Rectangle(x - 5, y - 20, BIG_REC_WIDTH + 10, 20, Color.green);
+            ySmallRectangle = y - SMALL_REC_HEIGHT;
         }
+        this.smallRectangle = new Rectangle(x - (SMALL_REC_HEIGHT / 4), ySmallRectangle, BIG_REC_WIDTH + (SMALL_REC_HEIGHT / 2), SMALL_REC_HEIGHT, Color.green);
     }
 
     public void paint(Graphics graphics) {

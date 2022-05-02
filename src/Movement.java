@@ -5,10 +5,12 @@ public class Movement implements KeyListener {
 
     private Bird bird;
     private boolean start;
+    private Music wing;
 
     public Movement (Bird bird) {
         this.bird = bird;
         this.start = false;
+        this.wing = new Music("wing.wav");
     }
 
 
@@ -21,6 +23,7 @@ public class Movement implements KeyListener {
         int keyCode = e.getKeyCode();
         if (keyCode == KeyEvent.VK_SPACE && this.bird.isAlive()) {
             this.start = true;
+            this.wing.play();
             new Thread(() -> {
                 for (int i = 0; i < 60; i++) {
                     this.bird.moveUp();
@@ -36,10 +39,6 @@ public class Movement implements KeyListener {
 
 
     public void keyReleased(KeyEvent e) {
-//        int keyCode = e.getKeyCode();
-//        if (keyCode == KeyEvent.VK_SPACE) {
-//            this.bird.moveUp();
-//        }
     }
 
     public boolean isStart() {

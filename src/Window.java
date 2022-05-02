@@ -11,17 +11,13 @@ public class Window extends JFrame {
     public static final int MAIN_SCENE_HEIGHT = 500;
 
 
-    private ImageIcon background;
-    private JLabel label;
-
-
     public static void main(String[] args) {
         Window window = new Window();
     }
 
     public Window () {
         this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
-        this.setResizable(true);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -29,6 +25,4 @@ public class Window extends JFrame {
         MainScene mainScene = new MainScene(X_MAIN_SCENE,Y_MAIN_SCENE,MAIN_SCENE_WIDTH,MAIN_SCENE_HEIGHT);
         this.add(mainScene);
     }
-
-
 }
