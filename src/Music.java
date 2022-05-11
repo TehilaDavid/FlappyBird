@@ -27,8 +27,8 @@ public class Music {
             clip = AudioSystem.getClip();
             clip.open(sound);
         } catch (Exception e) {
-            clip.start();
         }
+        clip.start();
     }
 
     public void stop() throws IOException {

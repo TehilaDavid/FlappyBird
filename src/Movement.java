@@ -10,7 +10,7 @@ public class Movement implements KeyListener {
     public Movement (Bird bird) {
         this.bird = bird;
         this.start = false;
-        this.wing = new Music("wing.wav");
+        this.wing = new Music("sounds/wing.wav");
     }
 
 

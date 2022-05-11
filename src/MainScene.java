@@ -58,9 +58,9 @@ public class MainScene extends JPanel {
         this.score.setText(""+this.passedCounter);
         this.add(this.score);
 
-        this.music = new Music("song.wav");
-        this.addPointSound = new Music("point.wav");
-        this.collisionSound = new Music("collision sound.wav");
+        this.music = new Music("sounds/song.wav");
+        this.addPointSound = new Music("sounds/point.wav");
+        this.collisionSound = new Music("sounds/collision sound.wav");
 
         this.movement = new Movement(this.bird);
         this.mainGameLoop();
